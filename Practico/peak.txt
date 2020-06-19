@@ -1,0 +1,60 @@
+// Para el determinar la cima de un arreglo, vamos a necesitar las siguientes funciones:
+
+// La funcion esCreciente nos dice si un arreglo es creciente en el segmento a[inc..fin]
+
+fun esCreciente(a: array[1..n] of Int, ini, fin: Nat) ret res: Bool
+    res:= true
+    for i:= ini to fin-1 do
+        res:= res ∧ (a[i] <=a [i+1]) 
+    od
+end fun
+
+// La funcion esDecreciente nos dice si un arreglo es decreciente en el segmento a[inc..fin]
+
+fun esDecreciente(a: array[1..n] of Int, ini, fin: Nat) ret res: Bool
+    res:= true
+    for i:= ini to fin-2 do
+        res:= res ∧ (a[i] >= a[i+1]);
+    od
+end fun
+ 
+
+// Luego, en el ejercicio 2b) nos pide que encontremos la cima del arreglo con un algoritmo que utilice la busqueda secuencial desde el inicio del arreglo, hasta su final.
+
+- Al pensar el algoritmo, siempre se me presentaba como problema los casos donde la cima se encontrara en posicion 1, o en la posicion n. Por eso decidi ver esos casos por separado. -
+
+fun encuentraCima(a: array[1...n] of Int) ret cima: Int
+    
+    if esCreciente(a, 1, n) -> cima:= n
+       esDecreciente(a, 1, n) -> cima:= 1
+       else ->  for i:= 1 to n-2 do
+                    if esCreciente(a, 0, i) ∧ esDecreciente(a, i, n) ∧ (a[i]>a[i-1] ∧ a[i]>a[i+1]) -> cima:= i fi
+                od
+    fi
+end fun
+
+// Luego el ejercicio 2c) nos pide realizar un algoritmo que resuelva el problema del inciso anterior, pero utilizando una busqueda binaria.
+
+// Primero creamos una funcion recursiva que nos encuentre el elemento maximo de un arreglo ya ordenado.
+
+fun binary_search_rec(a: array[1..n] of Int, ini, fin: Nat) ret res: Int
+    var media: Int
+    if  ini > fin -> res:= 0
+        ini <= fin -> media:= (ini+fin)/2
+                      if a[media]>a[media-1] ∧ a[media]>a[media+1] -> res:= media
+                         a[media]>=a[media-1]) ∧ a[media]<=a[media+1] -> res:= binary_search_rec(a, media, fin)
+                         a[media]<=a[media-1]) ∧ a[media]>=a[media+1] -> res:= binary_search_rec(a, ini, media)
+                      fi    
+    fi
+end fun
+
+// Luego la funcion princial queda de la siguente forma:
+
+fun binary_search(a: array[1..n] of Int) ret res: Int
+    
+    if  a[n]>a[n-1] -> res:= n
+        else if a[1]>a[2] -> res:= 1
+        else -> res:= binary_search_rec(a, 1, n)
+    fi
+end fun
+ 

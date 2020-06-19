@@ -1,0 +1,64 @@
+fun cardinal(s: Set of T) ret n: nat
+    n:= length(s)
+end fun
+
+fun member(e: T, s: Set of T) ret b: bool
+    var saux: List of T
+    var b: bool
+
+    saux:= list_copy(s)
+    b:= false
+
+    do (not (list_is_empty \/ b))
+        if  e = head(saux) -> b:= true
+            e ≠	head(saux) -> tail(saux)
+        fi
+    od
+
+    list_destroy(saux) 
+
+end fun
+
+proc elim(in/out s: Set of T, in e: T)
+    var saux: List of T
+    var n: nat  
+
+    saux:= list_copy(s)
+    n:= 0
+
+    do (not list_is_empty(saux))
+        if  e = head(saux) -> list_elim_at(s, n)
+            e ≠ head(saux) -> n:= n+1
+        fi
+
+        tail(saux)
+    od
+
+    list_destroy(saux)
+
+end proc
+
+proc inters(in/out s: Set of T, in s0: Set of T)
+    var saux: List of T
+    var d: T 
+
+    saux = list_copy(s)
+
+    do (not list_is_empty(saux))   
+        d:= head(saux)
+
+        if (not member(d, s0)) 
+            then elim(s, d)
+        fi
+
+        tail(saux)
+    od
+
+    list_destroy(saux)
+
+end proc
+    
+
+
+
+

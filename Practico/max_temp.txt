@@ -1,0 +1,31 @@
+fun max_prec_mes (med:array[1980..2016, enero..diciembre, 1..28, Temp..Prec] of nat) ret registro:array[1980..2016] of mes
+
+    var count_mes: nat
+    var max_pre: nat 
+    var max_mes: mes
+
+    for var_año:= 1980 to 2016 do
+
+	max_pre:= 0
+        max_mes:= enero
+
+        for var_mes:= enero to diciembre do
+
+            count_mes:= 0;
+
+            for var_dia:= 1 to 28 do
+                count_mes:= count_mes + med[var_año, var_mes, var_dia, Prec]
+            od
+
+            if count_mes > max_pre then
+
+                max_pre:= count_mes
+                max_mes:= var_mes
+                registro[var_año]:= max_mes     
+         
+            fi
+
+        od        
+    od
+
+end fun
